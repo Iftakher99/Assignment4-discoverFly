@@ -79,4 +79,3 @@ function getInputValue(id) {
   const ClassCount = parseInt(ClassInput.value);
   return ClassCount;
 }
-//final
