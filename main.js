@@ -11,10 +11,7 @@ const economyTicketIncreaseBtn = document.getElementById(
 const economyTicketDecreaseBtn = document.getElementById(
   "economy_class-ticket-decrease"
 );
-const subTotal = document.getElementById("sub_total");
-const vat = document.getElementById("vat_total");
-const total = document.getElementById("total");
-
+const bookingBtn = document.getElementById("booking_btn");
 //Event Loader
 firstClassTicketIncreaseBtn.addEventListener("click", function () {
   handleTicketChange("first_class-ticket", true, true);
@@ -27,6 +24,17 @@ economyTicketIncreaseBtn.addEventListener("click", function () {
 });
 economyTicketDecreaseBtn.addEventListener("click", function () {
   handleTicketChange("economy_class-ticket", false, false);
+});
+bookingBtn.addEventListener("click", function () {
+  const economyClassCount = getInputValue("economy_class-ticket");
+  const firstClassCount = getInputValue("first_class-ticket");
+  alert(
+    "You have booked " +
+      (economyClassCount + firstClassCount) +
+      " tickets " +
+      "And Your Cost is " +
+      document.getElementById("grand_total").innerText
+  );
 });
 
 //Event Function
@@ -50,9 +58,24 @@ function handleTicketChange(id, isIncrease, isClassic) {
   if (isClassic == false) {
     ticketPrice = newTicketCount * 100;
   }
-  const totalCost = (subTotal.innerText = ticketPrice);
-  const vatCount = totalCost * 0.1;
-  const vatTotal = (vat.innerText = vatCount);
-  const finalTotal = "$" + parseInt(totalCost + vatTotal);
-  total.innerText = finalTotal;
+  calculateTotal();
+}
+function calculateTotal() {
+  const firstClassCount = getInputValue("first_class-ticket");
+
+  const economyClassCount = getInputValue("economy_class-ticket");
+  const totalPrice = firstClassCount * 150 + economyClassCount * 100;
+
+  document.getElementById("sub_total").innerText = "$" + totalPrice;
+  const tax = totalPrice * 0.1;
+  document.getElementById("vat_total").innerText = "$" + tax;
+  const grandTotal = totalPrice + tax;
+  console.log(grandTotal);
+  document.getElementById("grand_total").innerText = grandTotal;
+}
+
+function getInputValue(id) {
+  const ClassInput = document.getElementById(id + "-count");
+  const ClassCount = parseInt(ClassInput.value);
+  return ClassCount;
 }
